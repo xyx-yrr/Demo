@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>user registration</title>
+</head>
+<body>
+    <h2>user registration
+    </h2>
+<form id="form">
+
+    Name:
+    <input type="text" id="name">
+    <br><br>
+    Email:
+    <input type="email" id="email">
+    <br><br>
+    Password:
+    <input type="password" id="password">
+    <br><br>
+    <button type="submit">Register</button>
+
+</form>
+<script>
+    document.getElementById('form').addEventListener('submit', function(event) {
+        event.preventDefault(); // Prevent form submission
+
+        let name = document.getElementById('name').value;
+        let email = document.getElementById('email').value;
+        let password = document.getElementById('password').value;
+
+        let user = {
+            name: name,
+            email: email,
+            password: password
+        };
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        users.push(user);
+            localStorage.setItem('users', JSON.stringify(users));
+            
+            let xhr = new XMLHttpRequest();
+            xhr.open('POST', 'https://jsonplaceholder.typicode.com/users', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 201) {
+                        alert('User registered successfully!');
+                    } else {
+                        alert('Error registering user. Please try again.');
+                    }
+                }
+                xhr.send(JSON.stringify(user));
+            };
+    });
+</script>
+</body>
+</html>
